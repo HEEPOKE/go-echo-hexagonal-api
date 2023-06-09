@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/repositories"
 	server "github.com/HEEPOKE/go-gin-hexagonal-api/internal/http"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/config"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/database"
@@ -15,9 +16,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	database.ConnectAndCloseDatabase(cfg)
+	db := database.ConnectAndCloseDatabase(cfg)
+
+	userRepository := repositories.NewUserRepository(db)
 
 	address := fmt.Sprintf(":%s", cfg.PORT)
-	http := server.NewServer()
+	http := server.NewServer(userRepository)
 	http.RouteInit(address)
 }
