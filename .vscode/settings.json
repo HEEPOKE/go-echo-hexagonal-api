@@ -6,6 +6,7 @@
         "HEEPOKE",
         "joho",
         "labstack",
-        "sslmode"
+        "sslmode",
+        "VARCHAR"
     ]
 }
