@@ -6,13 +6,11 @@
 cp .env.example .env
 ```
 
-## install
+## run
 
 ```bash
 go mod tidy -v
 ```
-
-## run
 
 ```bash
 go run cmd/main.go
