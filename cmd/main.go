@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
+	server "github.com/HEEPOKE/go-gin-hexagonal-api/internal/http"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/config"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/database"
-	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 
 	database.ConnectAndCloseDatabase(cfg)
 
-	e := echo.New()
-	address := fmt.Sprintf(":%s", cfg.DBPort)
-	e.Logger.Fatal(e.Start(address))
+	address := fmt.Sprintf(":%s", cfg.PORT)
+	http := server.NewServer()
+	http.RouteInit(address)
 }
