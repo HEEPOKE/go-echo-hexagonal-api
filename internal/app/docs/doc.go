@@ -121,6 +121,5 @@ func updateUser(c echo.Context) error {
 //	  404: ErrorResponse
 //	  500: ErrorResponse
 func deleteUser(c echo.Context) error {
-	// Your implementation to delete a user
 	return c.NoContent(204)
 }
