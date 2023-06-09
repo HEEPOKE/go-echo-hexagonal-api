@@ -1,12 +1,16 @@
 package database
 
 import (
+	"fmt"
+
+	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func ConnectDatabase() (*gorm.DB, error) {
-	dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
+func ConnectDatabase(cfg *config.Config) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
+		cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort, cfg.DBSsl, cfg.DB_TIMEZONE)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
@@ -15,8 +19,8 @@ func ConnectDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
-func ConnectAndCloseDatabase() *gorm.DB {
-	db, err := ConnectDatabase()
+func ConnectAndCloseDatabase(cfg *config.Config) *gorm.DB {
+	db, err := ConnectDatabase(cfg)
 	if err != nil {
 		panic(err)
 	}

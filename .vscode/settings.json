@@ -4,6 +4,7 @@
         "godotenv",
         "gorm",
         "HEEPOKE",
+        "joho",
         "labstack",
         "sslmode"
     ]
