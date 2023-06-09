@@ -1,8 +1,8 @@
 package services
 
 import (
+	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/models"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/interfaces"
 )
 
 type UserService struct {
