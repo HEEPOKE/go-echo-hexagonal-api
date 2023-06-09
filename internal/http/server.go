@@ -4,11 +4,13 @@ import (
 	"log"
 	"net/http"
 
+	// _ "github.com/HEEPOKE/go-gin-hexagonal-api/app/docs"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type Server struct {
@@ -53,6 +55,8 @@ func (s *Server) RouteInit(address string) {
 
 func (s *Server) routeConfig() {
 	api := s.echo.Group("/api")
+
+	api.GET("/docs/*", echoSwagger.WrapHandler)
 
 	api.GET("/users/all", s.userHandler.GetAllUsers)
 	api.GET("/users/find/:id", s.userHandler.GetUserByID)
