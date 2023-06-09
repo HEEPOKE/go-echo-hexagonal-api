@@ -1,5 +1,11 @@
 # go-gin-hexagonal-api
 
+## config .env
+
+```bash
+cp .env.example .env
+```
+
 ## install
 
 ```bash
