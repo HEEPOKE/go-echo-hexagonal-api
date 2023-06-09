@@ -3,16 +3,26 @@ package http
 import (
 	"log"
 
+	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/core/interfaces"
+	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/handlers"
+	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/services"
 	"github.com/labstack/echo/v4"
 )
 
 type Server struct {
-	echo *echo.Echo
+	echo        *echo.Echo
+	userHandler *handlers.UserHandler
 }
 
-func NewServer() *Server {
+func NewServer(userRepository interfaces.UserRepository) *Server {
+	e := echo.New()
+
+	userService := services.NewUserService(userRepository)
+	userHandler := handlers.NewUserHandler(*userService)
+
 	return &Server{
-		echo: echo.New(),
+		echo:        e,
+		userHandler: userHandler,
 	}
 }
 
@@ -26,4 +36,9 @@ func (s *Server) RouteInit(address string) {
 }
 
 func (s *Server) routeConfig() {
+	api := s.echo.Group("/api")
+
+	api.GET("/users/all", s.userHandler.GetAllUsers)
+	api.GET("/users/find/:id", s.userHandler.GetUserByID)
+	api.POST("/users/create", s.userHandler.CreateUser)
 }
