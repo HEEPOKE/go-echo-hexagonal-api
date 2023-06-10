@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/models"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/services"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/labstack/echo/v4"
 )
 

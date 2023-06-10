@@ -1,6 +1,6 @@
 package interfaces
 
-import "github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/models"
+import "github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 
 type UserRepository interface {
 	GetAll() ([]*models.User, error)

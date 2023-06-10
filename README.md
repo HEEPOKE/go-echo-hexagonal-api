@@ -1,4 +1,4 @@
-# go-gin-hexagonal-api
+# go-echo-hexagonal-api
 
 ## config .env
 

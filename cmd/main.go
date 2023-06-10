@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/repositories"
-	server "github.com/HEEPOKE/go-gin-hexagonal-api/internal/http"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/config"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/pkg/database"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/repositories"
+	server "github.com/HEEPOKE/go-echo-hexagonal-api/internal/http"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/database"
 )
 
 func main() {

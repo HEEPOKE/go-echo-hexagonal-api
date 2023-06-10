@@ -4,7 +4,7 @@ info:
   version: "1.0.0"
   description: "This is a sample API for demonstrating Swagger with Go Echo."
 host: "localhost:6476"
-basePath: "/api/v1"
+basePath: "/api"
 schemes:
   - "http"
 produces:
@@ -12,7 +12,7 @@ produces:
 consumes:
   - "application/json"
 paths:
-  /users:
+  /users/all:
     get:
       tags:
         - "users"
@@ -28,6 +28,7 @@ paths:
           description: "Internal Server Error"
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /users/create:
     post:
       tags:
         - "users"
@@ -45,7 +46,7 @@ paths:
           description: "Internal Server Error"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /users/{id}:
+  /users/find/{id}:
     get:
       tags:
         - "users"
@@ -60,52 +61,6 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/User"
-        404:
-          description: "Not Found"
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-    put:
-      tags:
-        - "users"
-      summary: "Updates an existing user."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          type: "integer"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: "#/definitions/User"
-        400:
-          description: "Bad Request"
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-        404:
-          description: "Not Found"
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-        500:
-          description: "Internal Server Error"
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-    delete:
-      tags:
-        - "users"
-      summary: "Deletes a user."
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          type: "integer"
-      responses:
-        204:
-          description: "No Content"
         404:
           description: "Not Found"
           schema:

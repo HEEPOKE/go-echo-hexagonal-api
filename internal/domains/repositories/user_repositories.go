@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/models"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"gorm.io/gorm"
 )
 

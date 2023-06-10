@@ -4,13 +4,12 @@ import (
 	"log"
 	"net/http"
 
-	// _ "github.com/HEEPOKE/go-gin-hexagonal-api/app/docs"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/core/interfaces"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/handlers"
-	"github.com/HEEPOKE/go-gin-hexagonal-api/internal/domains/services"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type Server struct {
@@ -22,7 +21,7 @@ func NewServer(userRepository interfaces.UserRepository) *Server {
 	e := echo.New()
 
 	loggerConfig := middleware.LoggerConfig{
-		Format:           "URI=${uri}\n, METHOD=${method},  STATUS=${status}, HEADER=${header}\n, QUERY=${query}\n, ERROR=${error}\n",
+		Format:           "URI::${uri}\n, METHOD::${method},  STATUS::${status}, HEADER::${header}\n, QUERY::${query}\n, ERROR::${error}\n",
 		CustomTimeFormat: "2006-01-02 15:04:05.00000",
 	}
 
@@ -54,9 +53,10 @@ func (s *Server) RouteInit(address string) {
 }
 
 func (s *Server) routeConfig() {
+	// s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
 	api := s.echo.Group("/api")
 
-	api.GET("/docs/*", echoSwagger.WrapHandler)
+	api.GET("/swagger/*", docs.ServeSwaggerUI)
 
 	api.GET("/users/all", s.userHandler.GetAllUsers)
 	api.GET("/users/find/:id", s.userHandler.GetUserByID)
