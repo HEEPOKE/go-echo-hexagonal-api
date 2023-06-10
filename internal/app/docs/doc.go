@@ -123,6 +123,6 @@ func createUser(c echo.Context) error {
 
 // ServeSwaggerUI serves the Swagger UI for viewing the generated documentation.
 func ServeSwaggerUI(c echo.Context) error {
-	url := "/api/swagger.json" // Path to your generated swagger.json or swagger.yml file
+	url := "swagger.json" // Path to your generated swagger.json or swagger.yml file
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }

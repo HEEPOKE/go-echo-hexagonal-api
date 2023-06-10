@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
+	_ "github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type Server struct {
@@ -43,7 +44,23 @@ func NewServer(userRepository interfaces.UserRepository) *Server {
 	}
 }
 
+// @title Echo Swagger Example API
+// @version 1.0
+// @description This is a sample server server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:6476
+// @BasePath /
+// @schemes http
 func (s *Server) RouteInit(address string) {
+	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
 	s.routeConfig()
 
 	err := s.echo.Start(address)
@@ -53,10 +70,8 @@ func (s *Server) RouteInit(address string) {
 }
 
 func (s *Server) routeConfig() {
-	// s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
-	api := s.echo.Group("/api")
 
-	api.GET("/swagger/*", docs.ServeSwaggerUI)
+	api := s.echo.Group("/api")
 
 	api.GET("/users/all", s.userHandler.GetAllUsers)
 	api.GET("/users/find/:id", s.userHandler.GetUserByID)
