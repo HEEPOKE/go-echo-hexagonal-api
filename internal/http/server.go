@@ -44,22 +44,7 @@ func NewServer(userRepository interfaces.UserRepository) *Server {
 	}
 }
 
-// @title Swagger Example API
-// @version 1.0
-// @description This is a API server.
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host localhost:6476
-// @BasePath /api
 func (s *Server) RouteInit(address string) {
-	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
 	s.routeConfig()
 
 	err := s.echo.Start(address)
@@ -69,10 +54,11 @@ func (s *Server) RouteInit(address string) {
 }
 
 func (s *Server) routeConfig() {
-
 	api := s.echo.Group("/api")
 
 	api.GET("/users/all", s.userHandler.GetAllUsers)
 	api.GET("/users/find/:id", s.userHandler.GetUserByID)
 	api.POST("/users/create", s.userHandler.CreateUser)
+
+	api.GET("/swagger/*", echoSwagger.WrapHandler)
 }

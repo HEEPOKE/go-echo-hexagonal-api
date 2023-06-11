@@ -10,6 +10,12 @@ import (
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/database"
 )
 
+// @title Swagger Example API
+// @title Go Echo Hexagonal API
+// @version 1.0
+// @description This is a Go Echo Hexagonal API server.
+// @host localhost:6476
+// @BasePath /api
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {

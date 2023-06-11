@@ -1,6 +1,11 @@
 package docs
 
-import "github.com/swaggo/swag"
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+	"github.com/swaggo/swag"
+)
 
 const docSwagger = `{
 	"swagger": "2.0",
@@ -149,6 +154,11 @@ var SwaggerInfo_swagger = &swag.Spec{
 	SwaggerTemplate:  docSwagger,
 }
 
-func SwaggerInit() {
-	swag.Register(SwaggerInfo_swagger.InstanceName(), SwaggerInfo_swagger)
+// func SwaggerInit() {
+// 	swag.Register(SwaggerInfo_swagger.InstanceName(), SwaggerInfo_swagger)
+// }
+
+func ServeSwaggerUI(c echo.Context) error {
+	url := "/api/docs/index.html?url=/internal/app/docs/swagger.json"
+	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
