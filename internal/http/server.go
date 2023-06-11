@@ -44,9 +44,9 @@ func NewServer(userRepository interfaces.UserRepository) *Server {
 	}
 }
 
-// @title Echo Swagger Example API
+// @title Swagger Example API
 // @version 1.0
-// @description This is a sample server server.
+// @description This is a API server.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
@@ -57,15 +57,14 @@ func NewServer(userRepository interfaces.UserRepository) *Server {
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:6476
-// @BasePath /
-// @schemes http
+// @BasePath /api
 func (s *Server) RouteInit(address string) {
 	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
 	s.routeConfig()
 
 	err := s.echo.Start(address)
 	if err != nil {
-		log.Fatalf("Failed to start the server: %v", err)
+		log.Fatalf("Failed To Start The Server: %v", err)
 	}
 }
 
