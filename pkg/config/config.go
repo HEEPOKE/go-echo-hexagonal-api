@@ -7,6 +7,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var (
+	Cfg *Config
+)
+
 type Config struct {
 	DBHost      string
 	DBUser      string
@@ -16,6 +20,8 @@ type Config struct {
 	DBSsl       string
 	DB_TIMEZONE string
 	PORT        string
+	PRIVATE_KEY string
+	PUBLIC_KEY  string
 }
 
 func LoadConfig() (*Config, error) {
@@ -25,7 +31,7 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
-	config := &Config{
+	cfg := &Config{
 		DBHost:      os.Getenv("DB_HOST"),
 		DBUser:      os.Getenv("DB_USER"),
 		DBPassword:  os.Getenv("DB_PASSWORD"),
@@ -34,7 +40,9 @@ func LoadConfig() (*Config, error) {
 		DBSsl:       os.Getenv("DB_SSL"),
 		DB_TIMEZONE: os.Getenv("DB_TIMEZONE"),
 		PORT:        os.Getenv("PORT"),
+		PRIVATE_KEY: os.Getenv("PRIVATE_KEY"),
+		PUBLIC_KEY:  os.Getenv("PUBLIC_KEY"),
 	}
 
-	return config, nil
+	return cfg, nil
 }

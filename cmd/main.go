@@ -17,16 +17,16 @@ import (
 // @host localhost:6476
 // @BasePath /api
 func main() {
-	cfg, err := config.LoadConfig()
+	_, err := config.LoadConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	db := database.ConnectAndCloseDatabase(cfg)
+	db := database.ConnectAndCloseDatabase()
 
 	userRepository := repositories.NewUserRepository(db)
 
-	address := fmt.Sprintf(":%s", cfg.PORT)
+	address := fmt.Sprintf(":%s", config.Cfg.PORT)
 	http := server.NewServer(userRepository)
 	http.RouteInit(address)
 }

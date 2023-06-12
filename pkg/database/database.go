@@ -13,9 +13,9 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func ConnectDatabase(cfg *config.Config) (*gorm.DB, error) {
+func ConnectDatabase() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
-		cfg.DBHost, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBPort, cfg.DBSsl, cfg.DB_TIMEZONE)
+		config.Cfg.DBHost, config.Cfg.DBUser, config.Cfg.DBPassword, config.Cfg.DBName, config.Cfg.DBPort, config.Cfg.DBSsl, config.Cfg.DB_TIMEZONE)
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
@@ -38,8 +38,8 @@ func ConnectDatabase(cfg *config.Config) (*gorm.DB, error) {
 	return db, nil
 }
 
-func ConnectAndCloseDatabase(cfg *config.Config) *gorm.DB {
-	db, err := ConnectDatabase(cfg)
+func ConnectAndCloseDatabase() *gorm.DB {
+	db, err := ConnectDatabase()
 	if err != nil {
 		panic(err)
 	}
