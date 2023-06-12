@@ -31,7 +31,7 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
-	cfg := &Config{
+	config := &Config{
 		DBHost:      os.Getenv("DB_HOST"),
 		DBUser:      os.Getenv("DB_USER"),
 		DBPassword:  os.Getenv("DB_PASSWORD"),
@@ -44,5 +44,7 @@ func LoadConfig() (*Config, error) {
 		PUBLIC_KEY:  os.Getenv("PUBLIC_KEY"),
 	}
 
-	return cfg, nil
+	Cfg = config
+
+	return config, nil
 }

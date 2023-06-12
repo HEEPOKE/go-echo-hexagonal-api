@@ -37,20 +37,3 @@ func ConnectDatabase() (*gorm.DB, error) {
 
 	return db, nil
 }
-
-func ConnectAndCloseDatabase() *gorm.DB {
-	db, err := ConnectDatabase()
-	if err != nil {
-		panic(err)
-	}
-
-	defer func() {
-		sqlDB, err := db.DB()
-		if err != nil {
-			panic(err)
-		}
-		sqlDB.Close()
-	}()
-
-	return db
-}

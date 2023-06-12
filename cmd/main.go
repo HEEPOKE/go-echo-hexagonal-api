@@ -22,7 +22,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db := database.ConnectAndCloseDatabase()
+	db, err := database.ConnectDatabase()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	userRepository := repositories.NewUserRepository(db)
 
