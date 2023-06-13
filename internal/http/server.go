@@ -8,6 +8,7 @@ import (
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
+	echoJwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -56,9 +57,17 @@ func (s *Server) RouteInit(address string) {
 func (s *Server) routeConfig() {
 	api := s.echo.Group("/api")
 
-	api.GET("/users/all", s.userHandler.GetAllUsers)
-	api.GET("/users/find/:id", s.userHandler.GetUserByID)
-	api.POST("/users/create", s.userHandler.CreateUser)
+	jwtMiddleware := echoJwt.WithConfig(echoJwt.Config{
+		SigningKey: []byte("jwt-secret-key"),
+	})
+
+	user := api.Group("/users")
+
+	user.Use(jwtMiddleware)
+
+	user.GET("/users/all", s.userHandler.GetAllUsers)
+	user.GET("/users/find/:id", s.userHandler.GetUserByID)
+	user.POST("/users/create", s.userHandler.CreateUser)
 
 	api.GET("/swagger/*", echoSwagger.WrapHandler)
 }
