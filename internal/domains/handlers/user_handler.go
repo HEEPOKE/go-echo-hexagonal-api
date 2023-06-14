@@ -45,6 +45,20 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
+func (h *UserHandler) GetUserByEmailOrUsername(c echo.Context) error {
+	emailOrUsername := c.QueryParam("email_or_username")
+	if emailOrUsername == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "Missing email or username")
+	}
+
+	user, err := h.userService.GetByEmailOrUsername(emailOrUsername, emailOrUsername)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user")
+	}
+
+	return c.JSON(http.StatusOK, user)
+}
+
 func (h *UserHandler) CreateUser(c echo.Context) error {
 	var user models.User
 

@@ -21,6 +21,10 @@ func (s *UserService) GetUserByID(id int) (*models.User, error) {
 	return s.userRepository.GetByID(id)
 }
 
+func (s *UserService) GetByEmailOrUsername(email, username string) (*models.User, error) {
+	return s.userRepository.GetByEmailOrUsername(email, username)
+}
+
 func (s *UserService) CreateUser(user *models.User) error {
 	return s.userRepository.Create(user)
 }

@@ -67,6 +67,7 @@ func (s *Server) routeConfig() {
 
 	user.GET("/users/all", s.userHandler.GetAllUsers)
 	user.GET("/users/find/:id", s.userHandler.GetUserByID)
+	user.GET("/users/find/:email_or_username", s.userHandler.GetUserByEmailOrUsername)
 	user.POST("/users/create", s.userHandler.CreateUser)
 
 	api.GET("/swagger/*", echoSwagger.WrapHandler)
