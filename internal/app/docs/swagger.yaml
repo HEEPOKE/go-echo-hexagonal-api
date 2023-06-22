@@ -1,0 +1,9 @@
+basePath: /api
+host: localhost:6476
+info:
+  contact: {}
+  description: This is a Go Echo Hexagonal API server.
+  title: Go Echo Hexagonal API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

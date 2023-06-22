@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
