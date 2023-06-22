@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgres-db
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=yoyo
+      - POSTGRES_PASSWORD=5555
+      - POSTGRES_DB=echo-hex
+    networks:
+      - Heepoke
+
+networks:
+  Heepoke:
+    driver: bridge
