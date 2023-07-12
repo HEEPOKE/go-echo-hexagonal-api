@@ -1,9 +1,96 @@
-basePath: /api
+basePath: /apis
+definitions:
+  enums.Role:
+    enum:
+    - ADMIN
+    - USER
+    type: string
+    x-enum-varnames:
+    - RoleAdmin
+    - RoleUser
+  handlers.UserInput:
+    properties:
+      email:
+        example: aaa@gmail.com
+        type: string
+      password:
+        example: yoyo5555
+        type: string
+      role:
+        $ref: '#/definitions/enums.Role'
+      tel:
+        example: "0000000000"
+        type: string
+      username:
+        example: heepoke
+        type: string
+    required:
+    - email
+    - role
+    - tel
+    - username
+    type: object
 host: localhost:6476
 info:
-  contact: {}
+  contact:
+    email: damon1FX@gmail.com
+    name: API Support
+    url: https://github.com/HEEPOKE
   description: This is a Go Echo Hexagonal API server.
   title: Go Echo Hexagonal API
   version: "1.0"
-paths: {}
+paths:
+  /users/all:
+    get:
+      consumes:
+      - application/json
+      description: Get list all Users
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get list all Users
+      tags:
+      - Users
+  /users/create:
+    post:
+      consumes:
+      - application/json
+      description: Create Users
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: CreateUsers
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UserInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Users
+      tags:
+      - Users
+schemes:
+- http
+- https
 swagger: "2.0"

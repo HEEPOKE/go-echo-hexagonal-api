@@ -1,12 +1,139 @@
 {
+    "schemes": [
+        "http",
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "This is a Go Echo Hexagonal API server.",
         "title": "Go Echo Hexagonal API",
-        "contact": {},
+        "contact": {
+            "name": "API Support",
+            "url": "https://github.com/HEEPOKE",
+            "email": "damon1FX@gmail.com"
+        },
         "version": "1.0"
     },
     "host": "localhost:6476",
-    "basePath": "/api",
-    "paths": {}
+    "basePath": "/apis",
+    "paths": {
+        "/users/all": {
+            "get": {
+                "description": "Get list all Users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list all Users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/users/create": {
+            "post": {
+                "description": "Create Users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create Users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "CreateUsers",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UserInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "enums.Role": {
+            "type": "string",
+            "enum": [
+                "ADMIN",
+                "USER"
+            ],
+            "x-enum-varnames": [
+                "RoleAdmin",
+                "RoleUser"
+            ]
+        },
+        "handlers.UserInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "role",
+                "tel",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "aaa@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "yoyo5555"
+                },
+                "role": {
+                    "$ref": "#/definitions/enums.Role"
+                },
+                "tel": {
+                    "type": "string",
+                    "example": "0000000000"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "heepoke"
+                }
+            }
+        }
+    }
 }

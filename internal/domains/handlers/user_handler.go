@@ -77,6 +77,16 @@ func (h *UserHandler) GetUserByEmailOrUsername(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
+// Post Create User godoc
+// @Summary Create Users
+// @Description Create Users
+// @Tags Users
+// @Accept application/json
+// @Produce json
+// @Success 201 {object} map[string]interface{}
+// @Router /users/create [post]
+// @param Authorization header string true "Bearer token"
+// @param Body body handlers.UserInput true "CreateUsers"
 func (h *UserHandler) CreateUser(c echo.Context) error {
 	var user models.User
 

@@ -55,7 +55,7 @@ func (s *Server) RouteInit(address string) {
 }
 
 func (s *Server) routeConfig() {
-	api := s.echo.Group("/api")
+	api := s.echo.Group("/apis")
 
 	jwtMiddleware := echoJwt.WithConfig(echoJwt.Config{
 		SigningKey: []byte("jwt-secret-key"),
@@ -70,5 +70,5 @@ func (s *Server) routeConfig() {
 	user.GET("/find/:email_or_username", s.userHandler.GetUserByEmailOrUsername)
 	user.POST("/create", s.userHandler.CreateUser)
 
-	api.GET("/swagger/*", echoSwagger.WrapHandler)
+	api.GET("/docs/*", echoSwagger.WrapHandler)
 }
