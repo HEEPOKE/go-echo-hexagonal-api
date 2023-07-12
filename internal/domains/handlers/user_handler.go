@@ -6,6 +6,7 @@ import (
 
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/enums"
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,10 +14,27 @@ type UserHandler struct {
 	userService services.UserService
 }
 
+type UserInput struct {
+	Email    string     `json:"email" validate:"required" example:"aaa@gmail.com"`
+	Username string     `json:"username" validate:"required" example:"heepoke"`
+	Password string     `json:"password" example:"yoyo5555"`
+	Tel      string     `json:"tel" validate:"required" example:"0000000000"`
+	Role     enums.Role `json:"role" validate:"required"`
+}
+
 func NewUserHandler(userService services.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+// Get All User godoc
+// @Summary Get list all Users
+// @Description Get list all Users
+// @Tags Users
+// @Accept application/json
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /users/all [get]
+// @param Authorization header string true "Bearer token"
 func (h *UserHandler) GetAllUsers(c echo.Context) error {
 	users, err := h.userService.GetAllUsers()
 	if err != nil {

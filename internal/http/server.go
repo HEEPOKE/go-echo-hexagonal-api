@@ -65,10 +65,10 @@ func (s *Server) routeConfig() {
 
 	user.Use(jwtMiddleware)
 
-	user.GET("/users/all", s.userHandler.GetAllUsers)
-	user.GET("/users/find/:id", s.userHandler.GetUserByID)
-	user.GET("/users/find/:email_or_username", s.userHandler.GetUserByEmailOrUsername)
-	user.POST("/users/create", s.userHandler.CreateUser)
+	user.GET("/all", s.userHandler.GetAllUsers)
+	user.GET("/find/:id", s.userHandler.GetUserByID)
+	user.GET("/find/:email_or_username", s.userHandler.GetUserByEmailOrUsername)
+	user.POST("/create", s.userHandler.CreateUser)
 
 	api.GET("/swagger/*", echoSwagger.WrapHandler)
 }
