@@ -17,7 +17,7 @@ type UserHandler struct {
 type UserInput struct {
 	Email    string     `json:"email" validate:"required" example:"aaa@gmail.com"`
 	Username string     `json:"username" validate:"required" example:"heepoke"`
-	Password string     `json:"password" example:"yoyo5555"`
+	Password string     `json:"password" example:"64765555"`
 	Tel      string     `json:"tel" validate:"required" example:"0000000000"`
 	Role     enums.Role `json:"role" validate:"required"`
 }
@@ -69,7 +69,7 @@ func (h *UserHandler) GetUserByEmailOrUsername(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Missing email or username")
 	}
 
-	user, err := h.userService.GetByEmailOrUsername(emailOrUsername, emailOrUsername)
+	user, err := h.userService.GetByEmailOrUsername(emailOrUsername)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get user")
 	}

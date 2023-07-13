@@ -34,15 +34,20 @@ func (r *UserRepository) GetByID(id int) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *UserRepository) GetByEmailOrUsername(email, username string) (*models.User, error) {
+func (r *UserRepository) GetByEmailOrUsername(emailOrUsername string) (*models.User, error) {
 	var user models.User
-	db := r.db.Select("id, email, username, tel, role, created_at, updated_at", "deleted_at").Where("email = ? OR username = ?", email, username).First(&user)
-	if db.Error != nil {
-		if errors.Is(db.Error, gorm.ErrRecordNotFound) {
-			return nil, fmt.Errorf("user not found: %w", db.Error)
+
+	err := r.db.Select("id, email, username, tel, role, created_at, updated_at", "deleted_at").
+		Where("email = ? OR username = ?", emailOrUsername).
+		First(&user).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("user not found: %w", err)
 		}
-		return nil, fmt.Errorf("failed to get user: %w", db.Error)
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
+
 	return &user, nil
 }
 
