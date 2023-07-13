@@ -17,9 +17,10 @@ import (
 type Server struct {
 	echo        *echo.Echo
 	userHandler *handlers.UserHandler
+	authHandler *handlers.AuthHandler
 }
 
-func NewServer(userRepository interfaces.UserRepository) *Server {
+func NewServer(userRepository interfaces.UserRepository, authRepository interfaces.AuthRepository) *Server {
 	e := echo.New()
 
 	loggerConfig := middleware.LoggerConfig{
@@ -39,9 +40,13 @@ func NewServer(userRepository interfaces.UserRepository) *Server {
 	userService := services.NewUserService(userRepository)
 	userHandler := handlers.NewUserHandler(*userService)
 
+	authService := services.NewAuthService(authRepository)
+	authHandler := handlers.NewAuthHandler(*authService)
+
 	return &Server{
 		echo:        e,
 		userHandler: userHandler,
+		authHandler: authHandler,
 	}
 }
 
@@ -57,6 +62,8 @@ func (s *Server) RouteInit(address string) {
 func (s *Server) routeConfig() {
 	api := s.echo.Group("/apis")
 
+	api.GET("/docs/*", echoSwagger.WrapHandler)
+
 	jwtMiddleware := echoJwt.WithConfig(echoJwt.Config{
 		SigningKey: []byte("jwt-secret-key"),
 	})
@@ -70,5 +77,8 @@ func (s *Server) routeConfig() {
 	user.GET("/find/:email_or_username", s.userHandler.GetUserByEmailOrUsername)
 	user.POST("/create", s.userHandler.CreateUser)
 
-	api.GET("/docs/*", echoSwagger.WrapHandler)
+	auth := api.Group("/auth")
+
+	auth.POST("/register", s.authHandler.RegisterHandler)
+
 }

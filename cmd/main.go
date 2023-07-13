@@ -32,8 +32,9 @@ func main() {
 	}
 
 	userRepository := repositories.NewUserRepository(db)
+	authRepository := repositories.NewAuthRepository(db)
 
 	address := fmt.Sprintf(":%s", config.Cfg.PORT)
-	http := server.NewServer(userRepository)
+	http := server.NewServer(userRepository, authRepository)
 	http.RouteInit(address)
 }
