@@ -16,15 +16,22 @@ func NewAuthRepository(db *gorm.DB) *AuthRepository {
 	return &AuthRepository{db: db}
 }
 
-// func (r *AuthRepository) Login() (*models.User, error) {
-// 	var users models.User
-// 	password, err := utils.Decrypt(users.Password)
+func (r *AuthRepository) Login(email, password string) (*models.User, error) {
+	var user models.User
+	err := r.db.Where("email = ?", email).First(&user).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, fmt.Errorf("user not found")
+		}
+		return nil, fmt.Errorf("failed to retrieve user: %w", err)
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return nil, fmt.Errorf("incorrect password")
+	}
 
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// }
+	return &user, nil
+}
 
 func (r *AuthRepository) Register(user *models.User) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
