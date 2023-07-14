@@ -20,7 +20,7 @@ type Server struct {
 	authHandler *handlers.AuthHandler
 }
 
-func NewServer(userRepository interfaces.UserRepository, authRepository interfaces.AuthRepository) *Server {
+func NewServer(userRepository interfaces.UserRepository, authRepository interfaces.AuthRepository, jwtSecretKey string) *Server {
 	e := echo.New()
 
 	loggerConfig := middleware.LoggerConfig{
@@ -41,7 +41,7 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 	userHandler := handlers.NewUserHandler(*userService)
 
 	authService := services.NewAuthService(authRepository)
-	authHandler := handlers.NewAuthHandler(*authService)
+	authHandler := handlers.NewAuthHandler(*authService, jwtSecretKey)
 
 	return &Server{
 		echo:        e,

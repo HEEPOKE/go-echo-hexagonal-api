@@ -6,11 +6,13 @@ import (
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/enums"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
 type AuthHandler struct {
-	authService services.AuthService
+	authService  services.AuthService
+	jwtSecretKey string
 }
 
 type LoginInput struct {
@@ -26,8 +28,8 @@ type RegisterInput struct {
 	Role     enums.Role `json:"role" validate:"required"`
 }
 
-func NewAuthHandler(authService services.AuthService) *AuthHandler {
-	return &AuthHandler{authService: authService}
+func NewAuthHandler(authService services.AuthService, jwtSecretKey string) *AuthHandler {
+	return &AuthHandler{authService: authService, jwtSecretKey: jwtSecretKey}
 }
 
 // Post Login godoc
@@ -53,8 +55,21 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to Login")
 	}
 
-	return c.JSON(http.StatusOK, user)
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_id"] = user.ID
 
+	tokenString, err := token.SignedString([]byte(ah.jwtSecretKey))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate token")
+	}
+
+	response := map[string]interface{}{
+		"user":         user,
+		"access_token": tokenString,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 // Post Register godoc
@@ -80,5 +95,9 @@ func (ah *AuthHandler) RegisterHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to register")
 	}
 
-	return c.NoContent(http.StatusOK)
+	response := map[string]interface{}{
+		"message": "User registered successfully",
+	}
+
+	return c.JSON(http.StatusCreated, response)
 }
