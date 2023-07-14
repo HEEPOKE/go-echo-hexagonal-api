@@ -79,6 +79,7 @@ func (s *Server) routeConfig() {
 
 	auth := api.Group("/auth")
 
+	auth.POST("/login", s.authHandler.LoginHandler)
 	auth.POST("/register", s.authHandler.RegisterHandler)
 
 }
