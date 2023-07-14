@@ -46,3 +46,10 @@ func (r *AuthRepository) Register(user *models.User) error {
 	}
 	return nil
 }
+
+func (r *AuthRepository) Logout(token string) error {
+	// if err := tokenManager.InvalidateToken(token); err != nil {
+	//     return fmt.Errorf("failed to logout: %w", err)
+	// }
+	return nil
+}

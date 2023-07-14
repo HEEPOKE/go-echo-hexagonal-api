@@ -12,16 +12,17 @@ var (
 )
 
 type Config struct {
-	DBHost      string
-	DBUser      string
-	DBPassword  string
-	DBName      string
-	DBPort      string
-	DBSsl       string
-	DB_TIMEZONE string
-	PORT        string
-	PRIVATE_KEY string
-	PUBLIC_KEY  string
+	DBHost         string
+	DBUser         string
+	DBPassword     string
+	DBName         string
+	DBPort         string
+	DBSsl          string
+	DB_TIMEZONE    string
+	PORT           string
+	PRIVATE_KEY    string
+	PUBLIC_KEY     string
+	JWT_SECRET_KEY string
 }
 
 func LoadConfig() (*Config, error) {
@@ -32,16 +33,17 @@ func LoadConfig() (*Config, error) {
 	}
 
 	config := &Config{
-		DBHost:      os.Getenv("DB_HOST"),
-		DBUser:      os.Getenv("DB_USER"),
-		DBPassword:  os.Getenv("DB_PASSWORD"),
-		DBName:      os.Getenv("DB_NAME"),
-		DBPort:      os.Getenv("DB_PORT"),
-		DBSsl:       os.Getenv("DB_SSL"),
-		DB_TIMEZONE: os.Getenv("DB_TIMEZONE"),
-		PORT:        os.Getenv("PORT"),
-		PRIVATE_KEY: os.Getenv("PRIVATE_KEY"),
-		PUBLIC_KEY:  os.Getenv("PUBLIC_KEY"),
+		DBHost:         os.Getenv("DB_HOST"),
+		DBUser:         os.Getenv("DB_USER"),
+		DBPassword:     os.Getenv("DB_PASSWORD"),
+		DBName:         os.Getenv("DB_NAME"),
+		DBPort:         os.Getenv("DB_PORT"),
+		DBSsl:          os.Getenv("DB_SSL"),
+		DB_TIMEZONE:    os.Getenv("DB_TIMEZONE"),
+		PORT:           os.Getenv("PORT"),
+		PRIVATE_KEY:    os.Getenv("PRIVATE_KEY"),
+		PUBLIC_KEY:     os.Getenv("PUBLIC_KEY"),
+		JWT_SECRET_KEY: os.Getenv("JWT_SECRET_KEY"),
 	}
 
 	Cfg = config
