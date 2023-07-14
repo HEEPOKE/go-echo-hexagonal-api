@@ -6,7 +6,7 @@
 docker create network Heepoke
 ```
 
-```bash 
+```bash
 docker compose up -d
 ```
 
