@@ -20,3 +20,7 @@ func (a *AuthService) Login(email, password string) (*models.User, error) {
 func (a *AuthService) Register(user *models.User) error {
 	return a.authRepository.Register(user)
 }
+
+func (a *AuthService) Logout(token string) error {
+	return a.authRepository.Logout(token)
+}

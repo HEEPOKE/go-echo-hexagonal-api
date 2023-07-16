@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/utils"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/enums"
@@ -100,4 +101,31 @@ func (ah *AuthHandler) RegisterHandler(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, response)
+}
+
+// Get Logout godoc
+// @Summary Logout
+// @Description Logout
+// @Tags Auth
+// @Accept application/json
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /auth/logout [get]
+// @param Authorization header string true "Bearer token"
+func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
+	token := utils.ExtractTokenFromHeader(c)
+	if token == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid token")
+	}
+
+	err := ah.authService.Logout(token)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to logout")
+	}
+
+	response := map[string]interface{}{
+		"message": "Logout successful",
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
