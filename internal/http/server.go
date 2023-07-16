@@ -81,5 +81,5 @@ func (s *Server) routeConfig() {
 
 	auth.POST("/login", s.authHandler.LoginHandler)
 	auth.POST("/register", s.authHandler.RegisterHandler)
-
+	auth.GET("/logout", s.authHandler.LogoutHandler)
 }
