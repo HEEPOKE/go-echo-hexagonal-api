@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/constants"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -68,7 +69,7 @@ func (r *AuthRepository) GenerateAccessToken(user *models.User, tokenExpiry time
 	claims["username"] = user.Username
 	claims["tel"] = user.Tel
 	claims["role"] = user.Role
-	claims["name"] = "access_token"
+	claims["name"] = constants.ACCESS_TOKEN
 	claims["exp"] = time.Now().Add(tokenExpiry).Unix()
 
 	tokenString, err := token.SignedString(r.accessTokenKey)
@@ -88,7 +89,7 @@ func (r *AuthRepository) GenerateRefreshToken(user *models.User, tokenExpiry tim
 	claims["username"] = user.Username
 	claims["tel"] = user.Tel
 	claims["role"] = user.Role
-	claims["name"] = "refresh_token"
+	claims["name"] = constants.REFRESH_TOKEN
 	claims["exp"] = time.Now().Add(tokenExpiry).Unix()
 
 	tokenString, err := token.SignedString(r.accessTokenKey)
