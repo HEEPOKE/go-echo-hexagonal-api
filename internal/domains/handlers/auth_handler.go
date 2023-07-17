@@ -129,3 +129,11 @@ func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response)
 }
+
+func (a *AuthHandler) AuthError(c echo.Context, e error) error {
+	if e.Error() == "Token is expired" {
+		return utils.ResponseFailOnError(c, e, "Unauthorized", http.StatusUnprocessableEntity)
+	} else {
+		return utils.ResponseFailOnError(c, e, "Unauthorized", http.StatusUnauthorized)
+	}
+}

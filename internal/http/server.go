@@ -8,6 +8,7 @@ import (
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
 	echoJwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -65,7 +66,12 @@ func (s *Server) routeConfig() {
 	api.GET("/docs/*", echoSwagger.WrapHandler)
 
 	jwtMiddleware := echoJwt.WithConfig(echoJwt.Config{
-		SigningKey: []byte("jwt-secret-key"),
+		SuccessHandler: s.next(),
+		ErrorHandler: ,
+		SigningKey:     []byte(config.Cfg.JWT_SECRET_KEY),
+		SigningMethod:  "HS512",
+		TokenLookup:    "header:Authorization",
+		AuthScheme:     "Bearer",
 	})
 
 	user := api.Group("/users")
