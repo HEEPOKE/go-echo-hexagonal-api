@@ -7,5 +7,5 @@ import (
 )
 
 func JWTMiddleware() echo.MiddlewareFunc {
-	return middleware.JWT([]byte(config.Cfg.JWT_SECRET_KEY))
+	return middleware.JWT([]byte(config.Cfg.JWT_ACCESS_KEY))
 }
