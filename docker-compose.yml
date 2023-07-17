@@ -11,6 +11,17 @@ services:
       - POSTGRES_DB=echo-hex
     networks:
       - Heepoke
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    hostname: redis
+    command: ["redis-server", "--include", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - Heepoke
 
 networks:
   Heepoke:
