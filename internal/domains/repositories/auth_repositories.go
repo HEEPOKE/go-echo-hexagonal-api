@@ -59,7 +59,7 @@ func (r *AuthRepository) Logout(token string) error {
 	return nil
 }
 
-func (r *AuthRepository) GenerateToken(user *models.User, tokenExpiry time.Duration) (string, error) {
+func (r *AuthRepository) GenerateAccessToken(user *models.User, tokenExpiry time.Duration) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS512)
 
 	claims := token.Claims.(jwt.MapClaims)

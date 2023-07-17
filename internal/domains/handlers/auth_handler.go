@@ -56,7 +56,7 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to Login")
 	}
 
-	tokenString, err := ah.authService.GenerateToken(user, time.Hour*24)
+	tokenString, err := ah.authService.GenerateAccessToken(user, time.Hour*24)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate token")
 	}

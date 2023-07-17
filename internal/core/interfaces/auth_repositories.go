@@ -11,6 +11,7 @@ type AuthRepository interface {
 	Login(email, password string) (*models.User, error)
 	Register(user *models.User) error
 	Logout(token string) error
-	GenerateToken(user *models.User, tokenExpiry time.Duration) (string, error)
-	VerifyToken(tokenString string) (*jwt.Token, error)
+	GenerateAccessToken(user *models.User, tokenExpiry time.Duration) (string, error)
+	GenerateRefreshToken(user *models.User, tokenExpiry time.Duration) (string, error)
+	VerifyAccessToken(tokenString string) (*jwt.Token, error)
 }
