@@ -32,6 +32,10 @@ func (a *AuthService) GenerateAccessToken(user *models.User, tokenExpiry time.Du
 	return a.authRepository.GenerateAccessToken(user, tokenExpiry)
 }
 
+func (a *AuthService) GenerateRefreshToken(user *models.User, tokenExpiry time.Duration) (string, error) {
+	return a.authRepository.GenerateRefreshToken(user, tokenExpiry)
+}
+
 func (a *AuthService) VerifyAccessToken(tokenString string) (*jwt.Token, error) {
 	return a.authRepository.VerifyAccessToken(tokenString)
 }
