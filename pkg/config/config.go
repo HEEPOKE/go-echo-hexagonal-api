@@ -22,7 +22,8 @@ type Config struct {
 	PORT                   string
 	PRIVATE_KEY            string
 	PUBLIC_KEY             string
-	JWT_SECRET_KEY         string
+	JWT_ACCESS_KEY         string
+	JWT_REFRESH_KEY        string
 	REDIS_URL              string
 	REDIS_PORT             string
 	REDIS_PASSWORD         string
@@ -47,7 +48,8 @@ func LoadConfig() (*Config, error) {
 		PORT:                   os.Getenv("PORT"),
 		PRIVATE_KEY:            os.Getenv("PRIVATE_KEY"),
 		PUBLIC_KEY:             os.Getenv("PUBLIC_KEY"),
-		JWT_SECRET_KEY:         os.Getenv("JWT_SECRET_KEY"),
+		JWT_ACCESS_KEY:         os.Getenv("JWT_ACCESS_KEY"),
+		JWT_REFRESH_KEY:        os.Getenv("JWT_REFRESH_KEY"),
 		REDIS_URL:              os.Getenv("REDIS_URL"),
 		REDIS_PORT:             os.Getenv("REDIS_PORT"),
 		REDIS_PASSWORD:         os.Getenv("REDIS_PASSWORD"),

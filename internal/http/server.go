@@ -73,7 +73,7 @@ func (s *Server) routeConfig() {
 
 	api.GET("/docs/*", echoSwagger.WrapHandler)
 
-	user := api.Group("/users", echojwt.JWT([]byte(config.Cfg.JWT_SECRET_KEY)))
+	user := api.Group("/users", echojwt.JWT([]byte(config.Cfg.JWT_ACCESS_KEY)))
 
 	user.GET("/all", s.userHandler.GetAllUsers)
 	user.GET("/find/:id", s.userHandler.GetUserByID)

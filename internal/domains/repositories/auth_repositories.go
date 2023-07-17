@@ -11,14 +11,16 @@ import (
 )
 
 type AuthRepository struct {
-	db        *gorm.DB
-	secretKey []byte
+	db              *gorm.DB
+	accessTokenKey  []byte
+	refreshTokenKey []byte
 }
 
-func NewAuthRepository(db *gorm.DB, secretKey string) *AuthRepository {
+func NewAuthRepository(db *gorm.DB, accessTokenKey, refreshTokenKey string) *AuthRepository {
 	return &AuthRepository{
-		db:        db,
-		secretKey: []byte(secretKey),
+		db:              db,
+		accessTokenKey:  []byte(accessTokenKey),
+		refreshTokenKey: []byte(refreshTokenKey),
 	}
 }
 
@@ -66,25 +68,46 @@ func (r *AuthRepository) GenerateToken(user *models.User, tokenExpiry time.Durat
 	claims["username"] = user.Username
 	claims["tel"] = user.Tel
 	claims["role"] = user.Role
+	claims["name"] = "access_token"
 	claims["exp"] = time.Now().Add(tokenExpiry).Unix()
 
-	tokenString, err := token.SignedString(r.secretKey)
+	tokenString, err := token.SignedString(r.accessTokenKey)
 	if err != nil {
-		return "", fmt.Errorf("failed to generate token: %w", err)
+		return "", fmt.Errorf("failed to generate access_token: %w", err)
 	}
 
 	return tokenString, nil
 }
 
-func (r *AuthRepository) VerifyToken(tokenString string) (*jwt.Token, error) {
+func (r *AuthRepository) GenerateRefreshToken(user *models.User, tokenExpiry time.Duration) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS512)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_id"] = user.ID
+	claims["email"] = user.Email
+	claims["username"] = user.Username
+	claims["tel"] = user.Tel
+	claims["role"] = user.Role
+	claims["name"] = "refresh_token"
+	claims["exp"] = time.Now().Add(tokenExpiry).Unix()
+
+	tokenString, err := token.SignedString(r.accessTokenKey)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate refresh_token: %w", err)
+	}
+
+	return tokenString, nil
+}
+
+func (r *AuthRepository) VerifyAccessToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("invalid token signing method")
+			return nil, fmt.Errorf("invalid access_token signing method")
 		}
-		return []byte(r.secretKey), nil
+		return []byte(r.accessTokenKey), nil
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse token: %w", err)
+		return nil, fmt.Errorf("failed to parse access_token: %w", err)
 	}
 
 	return token, nil
