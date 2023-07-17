@@ -81,9 +81,8 @@ func (r *AuthRepository) VerifyToken(tokenString string) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("invalid token signing method")
 		}
-		return r.secretKey, nil
+		return []byte(r.secretKey), nil
 	})
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse token: %w", err)
 	}

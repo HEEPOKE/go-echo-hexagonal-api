@@ -6,10 +6,11 @@ import (
 
 	_ "github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
+	myMidleware "github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/middleware"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
-	echoJwt "github.com/labstack/echo-jwt/v4"
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -38,6 +39,7 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 	}))
 	e.Use(middleware.LoggerWithConfig(loggerConfig))
 	e.Use(middleware.Recover())
+	e.Use(myMidleware.JWTMiddleware())
 
 	userService := services.NewUserService(userRepository)
 	userHandler := handlers.NewUserHandler(*userService)
@@ -69,16 +71,7 @@ func (s *Server) routeConfig() {
 
 	api.GET("/docs/*", echoSwagger.WrapHandler)
 
-	jwtMiddleware := echoJwt.WithConfig(echoJwt.Config{
-		ErrorHandler:  s.jwtHandler.AuthError,
-		SigningKey:    []byte(config.Cfg.JWT_SECRET_KEY),
-		SigningMethod: "HS512",
-		TokenLookup:   "header:Authorization:Bearer",
-	})
-
-	user := api.Group("/users")
-
-	user.Use(jwtMiddleware)
+	user := api.Group("/users", echojwt.JWT([]byte(config.Cfg.JWT_SECRET_KEY)))
 
 	user.GET("/all", s.userHandler.GetAllUsers)
 	user.GET("/find/:id", s.userHandler.GetUserByID)
