@@ -7,6 +7,7 @@ import (
 	_ "github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
 	myMidleware "github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/middleware"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/utils"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
@@ -29,6 +30,7 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 	loggerConfig := middleware.LoggerConfig{
 		Format:           "URI::${uri}\n, METHOD::${method},  STATUS::${status}, HEADER::${header}\n, QUERY::${query}\n, ERROR::${error}\n",
 		CustomTimeFormat: "2006-01-02 15:04:05.00000",
+		Output:           utils.ColorLoggerOutput(),
 	}
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
