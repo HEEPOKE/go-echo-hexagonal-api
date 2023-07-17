@@ -2,8 +2,11 @@ package repositories
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -49,4 +52,23 @@ func (r *AuthRepository) Register(user *models.User) error {
 
 func (r *AuthRepository) Logout(token string) error {
 	return nil
+}
+
+func (r *AuthRepository) GenerateToken(user *models.User, tokenExpiry time.Duration) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS512)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_id"] = user.ID
+	claims["email"] = user.Email
+	claims["username"] = user.Username
+	claims["tel"] = user.Tel
+	claims["role"] = user.Role
+	claims["exp"] = time.Now().Add(tokenExpiry).Unix()
+
+	tokenString, err := token.SignedString(config.Cfg.JWT_SECRET_KEY)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate token: %w", err)
+	}
+
+	return tokenString, nil
 }
