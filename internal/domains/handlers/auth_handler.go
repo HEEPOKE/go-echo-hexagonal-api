@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/utils"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/enums"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -56,11 +56,7 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to Login")
 	}
 
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["user_id"] = user.ID
-
-	tokenString, err := token.SignedString([]byte(ah.jwtSecretKey))
+	tokenString, err := ah.authService.GenerateToken(user, time.Hour*24)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate token")
 	}

@@ -1,8 +1,11 @@
 package services
 
 import (
+	"time"
+
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type AuthService struct {
@@ -23,4 +26,12 @@ func (a *AuthService) Register(user *models.User) error {
 
 func (a *AuthService) Logout(token string) error {
 	return a.authRepository.Logout(token)
+}
+
+func (a *AuthService) GenerateToken(user *models.User, tokenExpiry time.Duration) (string, error) {
+	return a.authRepository.GenerateToken(user, tokenExpiry)
+}
+
+func (a *AuthService) VerifyToken(tokenString string) (*jwt.Token, error) {
+	return a.authRepository.VerifyToken(tokenString)
 }
