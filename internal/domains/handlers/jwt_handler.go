@@ -10,11 +10,11 @@ import (
 type JwtHandler struct {
 }
 
-func NeJwtHandler() *JwtHandler {
+func NewJwtHandler() *JwtHandler {
 	return &JwtHandler{}
 }
 
-func AuthError(c echo.Context, e error) error {
+func (jh *JwtHandler) AuthError(c echo.Context, e error) error {
 	if e.Error() == "Token is expired" {
 		return utils.ResponseFailOnError(c, e, "Unauthorized", http.StatusUnprocessableEntity)
 	} else {
@@ -22,7 +22,7 @@ func AuthError(c echo.Context, e error) error {
 	}
 }
 
-func AuthSuccess(next echo.HandlerFunc) echo.HandlerFunc {
+func (jh *JwtHandler) AuthSuccess(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return next(c)
 	}

@@ -17,8 +17,9 @@ import (
 
 type Server struct {
 	echo        *echo.Echo
-	userHandler *handlers.UserHandler
+	jwtHandler  *handlers.JwtHandler
 	authHandler *handlers.AuthHandler
+	userHandler *handlers.UserHandler
 }
 
 func NewServer(userRepository interfaces.UserRepository, authRepository interfaces.AuthRepository, jwtSecretKey string) *Server {
@@ -44,10 +45,13 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 	authService := services.NewAuthService(authRepository)
 	authHandler := handlers.NewAuthHandler(*authService, jwtSecretKey)
 
+	jwtHandler := handlers.NewJwtHandler()
+
 	return &Server{
 		echo:        e,
 		userHandler: userHandler,
 		authHandler: authHandler,
+		jwtHandler:  jwtHandler,
 	}
 }
 
@@ -66,12 +70,10 @@ func (s *Server) routeConfig() {
 	api.GET("/docs/*", echoSwagger.WrapHandler)
 
 	jwtMiddleware := echoJwt.WithConfig(echoJwt.Config{
-		SuccessHandler: s.next(),
-		ErrorHandler: ,
-		SigningKey:     []byte(config.Cfg.JWT_SECRET_KEY),
-		SigningMethod:  "HS512",
-		TokenLookup:    "header:Authorization",
-		AuthScheme:     "Bearer",
+		ErrorHandler:  s.jwtHandler.AuthError,
+		SigningKey:    []byte(config.Cfg.JWT_SECRET_KEY),
+		SigningMethod: "HS512",
+		TokenLookup:   "header:Authorization:Bearer",
 	})
 
 	user := api.Group("/users")
