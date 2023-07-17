@@ -31,6 +31,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	database.CheckRedis()
+
 	userRepository := repositories.NewUserRepository(db)
 	authRepository := repositories.NewAuthRepository(db, config.Cfg.JWT_SECRET_KEY)
 
