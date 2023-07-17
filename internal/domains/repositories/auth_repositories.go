@@ -5,18 +5,21 @@ import (
 	"time"
 
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
-	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type AuthRepository struct {
-	db *gorm.DB
+	db        *gorm.DB
+	secretKey []byte
 }
 
-func NewAuthRepository(db *gorm.DB) *AuthRepository {
-	return &AuthRepository{db: db}
+func NewAuthRepository(db *gorm.DB, secretKey string) *AuthRepository {
+	return &AuthRepository{
+		db:        db,
+		secretKey: []byte(secretKey),
+	}
 }
 
 func (r *AuthRepository) Login(email, password string) (*models.User, error) {
@@ -65,10 +68,25 @@ func (r *AuthRepository) GenerateToken(user *models.User, tokenExpiry time.Durat
 	claims["role"] = user.Role
 	claims["exp"] = time.Now().Add(tokenExpiry).Unix()
 
-	tokenString, err := token.SignedString(config.Cfg.JWT_SECRET_KEY)
+	tokenString, err := token.SignedString(r.secretKey)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate token: %w", err)
 	}
 
 	return tokenString, nil
+}
+
+func (r *AuthRepository) VerifyToken(tokenString string) (*jwt.Token, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid token signing method")
+		}
+		return r.secretKey, nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse token: %w", err)
+	}
+
+	return token, nil
 }

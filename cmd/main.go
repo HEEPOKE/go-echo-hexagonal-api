@@ -32,7 +32,7 @@ func main() {
 	}
 
 	userRepository := repositories.NewUserRepository(db)
-	authRepository := repositories.NewAuthRepository(db)
+	authRepository := repositories.NewAuthRepository(db, config.Cfg.JWT_SECRET_KEY)
 
 	address := fmt.Sprintf(":%s", config.Cfg.PORT)
 	http := server.NewServer(userRepository, authRepository, config.Cfg.JWT_SECRET_KEY)
