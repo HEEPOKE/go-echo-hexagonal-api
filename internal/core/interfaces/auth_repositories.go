@@ -14,4 +14,5 @@ type AuthRepository interface {
 	GenerateAccessToken(user *models.User, tokenExpiry time.Duration) (string, error)
 	GenerateRefreshToken(user *models.User, tokenExpiry time.Duration) (string, error)
 	VerifyAccessToken(tokenString string) (*jwt.Token, error)
+	VerifyRefreshToken(tokenString string) (*jwt.Token, error)
 }

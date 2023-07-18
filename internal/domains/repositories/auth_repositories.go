@@ -113,3 +113,17 @@ func (r *AuthRepository) VerifyAccessToken(tokenString string) (*jwt.Token, erro
 
 	return token, nil
 }
+
+func (r *AuthRepository) VerifyRefreshToken(tokenString string) (*jwt.Token, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid refresh token signing method")
+		}
+		return r.refreshTokenKey, nil
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse refresh token: %w", err)
+	}
+
+	return token, nil
+}

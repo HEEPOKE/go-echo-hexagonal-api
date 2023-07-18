@@ -61,7 +61,7 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate access_token")
 	}
 
-	refershTokenString, err := ah.authService.GenerateRefreshToken(user, time.Hour*72)
+	refreshTokenString, err := ah.authService.GenerateRefreshToken(user, time.Hour*72)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate refresh_token")
 	}
@@ -69,7 +69,7 @@ func (ah *AuthHandler) LoginHandler(c echo.Context) error {
 	response := map[string]interface{}{
 		"user":          user,
 		"access_token":  tokenString,
-		"refresh_token": refershTokenString,
+		"refresh_token": refreshTokenString,
 	}
 
 	return c.JSON(http.StatusOK, response)
