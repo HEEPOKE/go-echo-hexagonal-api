@@ -47,7 +47,7 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 	userHandler := handlers.NewUserHandler(*userService)
 
 	authService := services.NewAuthService(authRepository)
-	authHandler := handlers.NewAuthHandler(*authService, jwtSecretKey)
+	authHandler := handlers.NewAuthHandler(*authService, *userService, jwtSecretKey)
 
 	jwtHandler := handlers.NewJwtHandler()
 

@@ -7,12 +7,15 @@ import (
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/utils"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/constants"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/enums"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
 type AuthHandler struct {
 	authService  services.AuthService
+	userService  services.UserService
 	jwtSecretKey string
 }
 
@@ -29,8 +32,8 @@ type RegisterInput struct {
 	Role     enums.Role `json:"role" validate:"required"`
 }
 
-func NewAuthHandler(authService services.AuthService, jwtSecretKey string) *AuthHandler {
-	return &AuthHandler{authService: authService, jwtSecretKey: jwtSecretKey}
+func NewAuthHandler(authService services.AuthService, userService services.UserService, jwtSecretKey string) *AuthHandler {
+	return &AuthHandler{authService: authService, userService: userService, jwtSecretKey: jwtSecretKey}
 }
 
 // Post Login godoc
@@ -127,6 +130,36 @@ func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
 
 	response := map[string]interface{}{
 		"message": "Logout successful",
+	}
+
+	return c.JSON(http.StatusOK, response)
+}
+
+func (ah *AuthHandler) RefreshTokenHandler(c echo.Context) error {
+	token := c.Get("user").(*jwt.Token)
+
+	claims := token.Claims.(jwt.MapClaims)
+
+	userID := claims["user_id"].(int)
+
+	user, err := ah.userService.GetUserByID(userID)
+	if err != nil {
+		return utils.ResponseFailOnError(c, err, constants.ERR_REFRESH_TOKEN_FAILED, http.StatusInternalServerError)
+	}
+
+	accessToken, err := ah.authService.GenerateAccessToken(user, time.Hour*24)
+	if err != nil {
+		return utils.ResponseFailOnError(c, err, constants.ERR_ACCESS_TOKEN_FAILED, http.StatusInternalServerError)
+	}
+
+	refreshToken, err := ah.authService.GenerateRefreshToken(user, time.Hour*72)
+	if err != nil {
+		return utils.ResponseFailOnError(c, err, constants.ERR_REFRESH_TOKEN_FAILED, http.StatusInternalServerError)
+	}
+
+	response := map[string]interface{}{
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	}
 
 	return c.JSON(http.StatusOK, response)
