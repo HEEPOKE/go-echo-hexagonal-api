@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/docs"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/interfaces"
-	myMidleware "github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/middleware"
+	myMiddleware "github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/middleware"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/core/utils"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/handlers"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
@@ -41,7 +41,7 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 	}))
 	e.Use(middleware.LoggerWithConfig(loggerConfig))
 	e.Use(middleware.Recover())
-	e.Use(myMidleware.JWTMiddleware())
+	e.Use(myMiddleware.JWTMiddleware())
 
 	userService := services.NewUserService(userRepository)
 	userHandler := handlers.NewUserHandler(*userService)

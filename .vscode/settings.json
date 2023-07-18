@@ -1,13 +1,15 @@
 {
-    "cSpell.words": [
-        "dbname",
-        "godotenv",
-        "gorm",
-        "HEEPOKE",
-        "joho",
-        "labstack",
-        "sslmode",
-        "swaggo",
-        "VARCHAR"
-    ]
+  "cSpell.words": [
+    "dbname",
+    "echojwt",
+    "godotenv",
+    "gorm",
+    "HEEPOKE",
+    "joho",
+    "labstack",
+    "Midleware",
+    "sslmode",
+    "swaggo",
+    "VARCHAR"
+  ]
 }
