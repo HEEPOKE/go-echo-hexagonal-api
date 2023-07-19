@@ -135,6 +135,15 @@ func (ah *AuthHandler) LogoutHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, response)
 }
 
+// Get Refreah Token godoc
+// @Summary Refreah Token
+// @Description Refreah Token
+// @Tags Auth
+// @Accept application/json
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /auth/refresh-token [get]
+// @param Authorization header string true "Bearer token"
 func (ah *AuthHandler) RefreshTokenHandler(c echo.Context) error {
 	token := c.Get("user").(*jwt.Token)
 

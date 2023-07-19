@@ -20,6 +20,156 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "login",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.LoginInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "get": {
+                "description": "Logout",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh-token": {
+            "get": {
+                "description": "Refreah Token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refreah Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Register",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.RegisterInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/users/all": {
             "get": {
                 "description": "Get list all Users",
@@ -108,6 +258,54 @@ const docTemplate = `{
                 "RoleUser"
             ]
         },
+        "handlers.LoginInput": {
+            "type": "object",
+            "required": [
+                "email_or_username",
+                "password"
+            ],
+            "properties": {
+                "email_or_username": {
+                    "type": "string",
+                    "example": "heepoke"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "64765555"
+                }
+            }
+        },
+        "handlers.RegisterInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "role",
+                "tel",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "aaa@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "64765555"
+                },
+                "role": {
+                    "$ref": "#/definitions/enums.Role"
+                },
+                "tel": {
+                    "type": "string",
+                    "example": "0000000000"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "heepoke"
+                }
+            }
+        },
         "handlers.UserInput": {
             "type": "object",
             "required": [
@@ -123,7 +321,7 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "example": "yoyo5555"
+                    "example": "64765555"
                 },
                 "role": {
                     "$ref": "#/definitions/enums.Role"
