@@ -12,19 +12,38 @@ services:
     networks:
       - Heepoke
   redis:
-    image: "redis:latest"
-    container_name: redis
+    image: redis:latest
+    container_name: redis-cache
     hostname: redis
-    command: ["redis-server", "--include", "/usr/local/etc/redis/redis.conf"]
+    command: ["redis-server", "--include", "/usr/local/etc/redis/redis.conf", "--appendonly", "yes", "--requirepass", "yoyo5555"]
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
-      - "./redis/redis.conf:/usr/local/etc/redis/redis.conf"
+      - redis-data:/var/lib/redis
+      - "./pkg/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf"
     environment:
-      - REDIS_REPLICATION_MODE=master
+      REDIS_REPLICATION_MODE: master
+      REDIS_PASSWORD: 
     networks:
       - Heepoke
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: echo-api
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - 6476:6476
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - Heepoke
+
+volumes:
+  redis-data:
 
 networks:
   Heepoke:

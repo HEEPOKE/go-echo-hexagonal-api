@@ -1,22 +1,22 @@
 # go-echo-hexagonal-api
 
-## Run DB With Docker
-
-```bash
-docker create network Heepoke
-```
-
-```bash
-docker compose up -d
-```
-
-## config .env
+## config Environment
 
 ```bash
 cp .env.example .env
 ```
 
 - then update environments in .env
+
+## Run Project With Docker
+
+```bash
+docker create network Heepoke
+```
+
+```bash
+docker compose up -d && docker compose logs api --follow
+```
 
 ## run
 
