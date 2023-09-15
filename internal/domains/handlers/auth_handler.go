@@ -14,9 +14,10 @@ import (
 )
 
 type AuthHandler struct {
-	authService  services.AuthService
-	userService  services.UserService
-	jwtSecretKey string
+	authService   services.AuthService
+	userService   services.UserService
+	jwtSecretKey  string
+	jwtRefreahKey string
 }
 
 type LoginInput struct {
@@ -32,8 +33,8 @@ type RegisterInput struct {
 	Role     enums.Role `json:"role" validate:"required"`
 }
 
-func NewAuthHandler(authService services.AuthService, userService services.UserService, jwtSecretKey string) *AuthHandler {
-	return &AuthHandler{authService: authService, userService: userService, jwtSecretKey: jwtSecretKey}
+func NewAuthHandler(authService services.AuthService, userService services.UserService, jwtSecretKey, jwtRefreahKey string) *AuthHandler {
+	return &AuthHandler{authService: authService, userService: userService, jwtSecretKey: jwtSecretKey, jwtRefreahKey: jwtRefreahKey}
 }
 
 // Post Login godoc
