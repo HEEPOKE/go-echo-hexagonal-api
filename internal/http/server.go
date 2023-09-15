@@ -17,13 +17,14 @@ import (
 )
 
 type Server struct {
-	echo        *echo.Echo
-	jwtHandler  *handlers.JwtHandler
-	authHandler *handlers.AuthHandler
-	userHandler *handlers.UserHandler
+	echo          *echo.Echo
+	jwtHandler    *handlers.JwtHandler
+	authHandler   *handlers.AuthHandler
+	userHandler   *handlers.UserHandler
+	scheduHandler *handlers.ScheduHandler
 }
 
-func NewServer(userRepository interfaces.UserRepository, authRepository interfaces.AuthRepository, jwtSecretKey, jwtRefreshKey string) *Server {
+func NewServer(userRepository interfaces.UserRepository, authRepository interfaces.AuthRepository, scheduRepository interfaces.ScheduRepository, jwtSecretKey, jwtRefreshKey string) *Server {
 	e := echo.New()
 
 	loggerConfig := middleware.LoggerConfig{
@@ -49,11 +50,15 @@ func NewServer(userRepository interfaces.UserRepository, authRepository interfac
 
 	jwtHandler := handlers.NewJwtHandler()
 
+	scheduService := services.NewScheduService(scheduRepository)
+	scheduHandler := handlers.NewScheduHandler(*scheduService)
+
 	return &Server{
-		echo:        e,
-		userHandler: userHandler,
-		authHandler: authHandler,
-		jwtHandler:  jwtHandler,
+		echo:          e,
+		authHandler:   authHandler,
+		jwtHandler:    jwtHandler,
+		userHandler:   userHandler,
+		scheduHandler: scheduHandler,
 	}
 }
 
@@ -71,6 +76,13 @@ func (s *Server) routeConfig() {
 
 	api.GET("/docs/*", echoSwagger.WrapHandler)
 
+	auth := api.Group("/auth")
+
+	auth.POST("/login", s.authHandler.LoginHandler)
+	auth.POST("/register", s.authHandler.RegisterHandler)
+	auth.GET("/logout", s.authHandler.LogoutHandler)
+	auth.GET("/refresh-token", s.authHandler.RefreshTokenHandler)
+
 	user := api.Group("/users", echojwt.JWT([]byte(config.Cfg.JWT_ACCESS_KEY)))
 
 	user.GET("/all", s.userHandler.GetAllUsers)
@@ -78,10 +90,7 @@ func (s *Server) routeConfig() {
 	user.GET("/find/:email_or_username", s.userHandler.GetUserByEmailOrUsername)
 	user.POST("/create", s.userHandler.CreateUser)
 
-	auth := api.Group("/auth")
+	schedu := api.Group("/schedu")
 
-	auth.POST("/login", s.authHandler.LoginHandler)
-	auth.POST("/register", s.authHandler.RegisterHandler)
-	auth.GET("/logout", s.authHandler.LogoutHandler)
-	auth.GET("/refresh-token", s.authHandler.RefreshTokenHandler)
+	schedu.GET("/list", s.scheduHandler.List)
 }

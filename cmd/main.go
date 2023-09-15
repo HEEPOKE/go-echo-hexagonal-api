@@ -33,10 +33,11 @@ func main() {
 
 	database.CheckRedis()
 
-	userRepository := repositories.NewUserRepository(db)
 	authRepository := repositories.NewAuthRepository(db, config.Cfg.JWT_ACCESS_KEY, config.Cfg.JWT_REFRESH_KEY)
+	userRepository := repositories.NewUserRepository(db)
+	scheduRepository := repositories.NewScheduRepository(db)
 
 	address := fmt.Sprintf(":%s", config.Cfg.PORT)
-	http := server.NewServer(userRepository, authRepository, config.Cfg.JWT_ACCESS_KEY, config.Cfg.JWT_REFRESH_KEY)
+	http := server.NewServer(userRepository, authRepository, scheduRepository, config.Cfg.JWT_ACCESS_KEY, config.Cfg.JWT_REFRESH_KEY)
 	http.RouteInit(address)
 }
