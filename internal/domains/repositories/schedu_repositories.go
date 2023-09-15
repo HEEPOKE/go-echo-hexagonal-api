@@ -21,3 +21,7 @@ func (r *ScheduRepository) List() ([]*models.Schedu, error) {
 	}
 	return schedus, nil
 }
+
+func (r *ScheduRepository) CreateNoti(schedu *models.Schedu) error {
+	return r.db.Create(schedu).Error
+}

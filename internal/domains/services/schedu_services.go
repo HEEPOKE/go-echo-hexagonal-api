@@ -16,3 +16,7 @@ func NewScheduService(scheduRepository interfaces.ScheduRepository) *ScheduServi
 func (s *ScheduService) List() ([]*models.Schedu, error) {
 	return s.scheduRepository.List()
 }
+
+func (s *ScheduService) CreateNoti(schedu *models.Schedu) error {
+	return s.scheduRepository.CreateNoti(schedu)
+}

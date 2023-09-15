@@ -93,4 +93,5 @@ func (s *Server) routeConfig() {
 	schedu := api.Group("/schedu")
 
 	schedu.GET("/list", s.scheduHandler.List)
+	schedu.POST("/create-noti", s.scheduHandler.CreateNoti)
 }

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/models"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	"github.com/labstack/echo/v4"
 )
@@ -22,4 +23,20 @@ func (sh *ScheduHandler) List(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, shcedu)
+}
+
+func (sh *ScheduHandler) CreateNoti(c echo.Context) error {
+	var schedu models.Schedu
+
+	err := c.Bind(&schedu)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode schedu data")
+	}
+
+	err = sh.scheduServices.CreateNoti(&schedu)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to create schedu")
+	}
+
+	return c.NoContent(http.StatusCreated)
 }
