@@ -26,7 +26,7 @@ func ScheduleTaskDiscord(scheduTime time.Time, content string) error {
 		0,
 		loc,
 	)
-	fmt.Printf("TimeUse:: %s\n", scheduledTime)
+
 	_, err = taskScheduler.Schedule(func(ctx context.Context) {
 		fmt.Printf("TimeNow:: %s\n", time.Now())
 	}, chrono.WithTime(scheduledTime))
