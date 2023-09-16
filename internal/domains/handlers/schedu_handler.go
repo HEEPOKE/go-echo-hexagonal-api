@@ -42,7 +42,7 @@ func (sh *ScheduHandler) CreateNoti(c echo.Context) error {
 
 	err = utils.ScheduleTaskDiscord(scheduTime, schedu.Content)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to schedule the task")
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	err = sh.scheduServices.CreateNoti(&schedu)

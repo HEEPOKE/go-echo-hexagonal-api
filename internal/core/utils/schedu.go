@@ -1,29 +1,34 @@
 package utils
 
 import (
+	"context"
 	"fmt"
 	"time"
 
-	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/hooks"
-	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
-	"github.com/go-co-op/gocron"
+	"github.com/procyon-projects/chrono"
 )
 
 func ScheduleTaskDiscord(scheduTime time.Time, content string) error {
-	loc, err := time.LoadLocation("Asia/Bangkok")
-	if err != nil {
-		return err
-	}
+	taskScheduler := chrono.NewDefaultTaskScheduler()
 
-	s := gocron.NewScheduler(loc)
-	_, err = s.At(scheduTime.Format("15:04")).Do(func() {
-		hooks.SendDiscordMessage("HEEPOKE", content, config.Cfg.DISCORD_URL)
-	})
+	scheduledTime := time.Date(
+		scheduTime.Year(),
+		scheduTime.Month(),
+		scheduTime.Day(),
+		scheduTime.Hour(),
+		scheduTime.Minute(),
+		0,
+		0,
+		scheduTime.Location(),
+	)
+
+	_, err := taskScheduler.Schedule(func(ctx context.Context) {
+		fmt.Printf("TimeNow:: %s\n", time.Now())
+	}, chrono.WithTime(scheduledTime))
+
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Test:: %s\n", scheduTime)
-	s.StartAsync()
 
 	return nil
 }
