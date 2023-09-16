@@ -11,6 +11,11 @@ import (
 func ScheduleTaskDiscord(scheduTime time.Time, content string) error {
 	taskScheduler := chrono.NewDefaultTaskScheduler()
 
+	loc, err := time.LoadLocation("Asia/Bangkok")
+	if err != nil {
+		return err
+	}
+
 	scheduledTime := time.Date(
 		scheduTime.Year(),
 		scheduTime.Month(),
@@ -19,10 +24,10 @@ func ScheduleTaskDiscord(scheduTime time.Time, content string) error {
 		scheduTime.Minute(),
 		0,
 		0,
-		scheduTime.Location(),
+		loc,
 	)
-
-	_, err := taskScheduler.Schedule(func(ctx context.Context) {
+	fmt.Printf("TimeUse:: %s\n", scheduledTime)
+	_, err = taskScheduler.Schedule(func(ctx context.Context) {
 		fmt.Printf("TimeNow:: %s\n", time.Now())
 	}, chrono.WithTime(scheduledTime))
 
