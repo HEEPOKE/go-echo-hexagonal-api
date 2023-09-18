@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/app/tasks"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/repositories"
+	"github.com/HEEPOKE/go-echo-hexagonal-api/internal/domains/services"
 	server "github.com/HEEPOKE/go-echo-hexagonal-api/internal/http"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/config"
 	"github.com/HEEPOKE/go-echo-hexagonal-api/pkg/database"
@@ -36,6 +38,12 @@ func main() {
 	authRepository := repositories.NewAuthRepository(db, config.Cfg.JWT_ACCESS_KEY, config.Cfg.JWT_REFRESH_KEY)
 	userRepository := repositories.NewUserRepository(db)
 	scheduRepository := repositories.NewScheduRepository(db)
+
+	scheduService := services.NewScheduService(scheduRepository)
+	scheduServiceValue := *scheduService
+
+	taskAuto := tasks.NewScheduTask(scheduServiceValue)
+	taskAuto.AutoTaskRunner()
 
 	address := fmt.Sprintf(":%s", config.Cfg.PORT)
 	http := server.NewServer(userRepository, authRepository, scheduRepository, config.Cfg.JWT_ACCESS_KEY, config.Cfg.JWT_REFRESH_KEY)

@@ -4,8 +4,8 @@ go 1.20
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.0.0
-	github.com/gtuk/discordwebhook v1.1.0
 	github.com/joho/godotenv v1.5.1
+	github.com/procyon-projects/chrono v1.1.2
 	github.com/swaggo/echo-swagger v1.4.0
 	github.com/swaggo/swag v1.16.1
 )
@@ -20,8 +20,8 @@ require (
 	github.com/go-openapi/swag v0.22.4 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/procyon-projects/chrono v1.1.2 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
+	github.com/rs/zerolog v1.30.0 // indirect
 	github.com/stretchr/testify v1.8.3 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
 	golang.org/x/tools v0.10.0 // indirect
@@ -45,7 +45,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.10.0
 	golang.org/x/net v0.11.0 // indirect
-	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.10.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	gorm.io/driver/postgres v1.5.2
